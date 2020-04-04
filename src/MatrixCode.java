@@ -2,6 +2,7 @@ import java.util.ArrayList;
 
 /**
  * Code matrix from array to list
+ *
  * @author Damir Davletshin and Rinat Akhmethanov
  * @version 1.0
  */
@@ -18,6 +19,7 @@ public class MatrixCode {
 
     /**
      * Constructs a new object
+     *
      * @param matrix matrix in array
      */
     public MatrixCode(int[][] matrix) {
@@ -27,6 +29,7 @@ public class MatrixCode {
 
     /**
      * Decode matrix from list to array
+     *
      * @return decoded matrix in array
      */
     public int[][] decode() {
@@ -45,8 +48,9 @@ public class MatrixCode {
 
     /**
      * Set new value in matrix's element in i-j position
-     * @param i element's line number
-     * @param j element's column number
+     *
+     * @param i     element's line number
+     * @param j     element's column number
      * @param value new element's value
      */
     public void insert(int i, int j, int value) {
@@ -64,6 +68,7 @@ public class MatrixCode {
 
     /**
      * Clear value in matrix's element in i-j position (set 0 value)
+     *
      * @param i element's line number
      * @param j element's column number
      */
@@ -73,6 +78,7 @@ public class MatrixCode {
 
     /**
      * Return ArrayList with minimum value in each column
+     *
      * @return ArrayList with minimum value in each column
      */
     public ArrayList<Integer> minList() {
@@ -94,6 +100,7 @@ public class MatrixCode {
 
     /**
      * Return sum of elements in main diagonal
+     *
      * @return sum of elements in main diagonal
      */
     public int sumDiag() {
@@ -110,16 +117,16 @@ public class MatrixCode {
      * Transpose matrix
      */
     public void transp() {
-        Element elemMain = head, elemToChange, elemOnI, elemOnJ;
-        for (int i = 0; i < SIZE; i++) {
+        Element elemMain = head, elemOnI, elemOnJ;
+        for (int i = 0; i < SIZE - 1; i++) {
             elemOnI = elemOnJ = elemMain;
-            for (int j = 0; j < SIZE; j++) {
-                elemToChange = elemOnI;
-                elemOnI = elemOnJ;
-                elemOnJ = elemToChange;
+            for (int j = 0; j < SIZE - i; j++) {
+                int value = elemOnI.value;
+                elemOnI.value = elemOnJ.value;
+                elemOnJ.value = value;
 
-                elemOnI = elemOnJ.nextI;
-                elemOnJ = elemOnI.nextJ;
+                elemOnI = elemOnI.nextI;
+                elemOnJ = elemOnJ.nextJ;
             }
             elemMain = elemMain.nextI.nextJ;
         }
@@ -127,6 +134,7 @@ public class MatrixCode {
 
     /**
      * Sum elements in j1 and j2 columns in matrix and result set to j1 column
+     *
      * @param j1 number of column to set result
      * @param j2 number of second column
      */
@@ -134,7 +142,7 @@ public class MatrixCode {
         Element elem1 = head, elem2 = head;
         for (int i = 0; i < j1; i++) {
             elem1 = elem1.nextJ;
-        }//оптимизация - двигать до j1 или j2, смотря что больше
+        }
         for (int i = 0; i < j2; i++) {
             elem2 = elem2.nextJ;
         }
@@ -147,6 +155,7 @@ public class MatrixCode {
 
     /**
      * Code matrix from array to list
+     *
      * @param matrix matrix in array
      */
     private void code(int[][] matrix) {
@@ -157,10 +166,22 @@ public class MatrixCode {
             element = element.nextJ;
         }
         for (int i = 1; i < SIZE; i++) {
+            elementI = elementI.nextI = new Element(matrix[i][0], i, 0);
             element = elementI;
-            for (int j = 0; j < SIZE; j++) {
-                element.nextI = new Element(matrix[i][j], i, j);
+            for (int j = 1; j < SIZE; j++) {
+                element.nextJ = new Element(matrix[i][j], i, j);
                 element = element.nextJ;
+            }
+        }
+        elementI = head;
+        Element elementJ;
+        for (int i = 0; i < SIZE - 1; i++) {
+            element = elementI;
+            elementJ = elementI.nextI;
+            for (int j = 0; j < SIZE; j++) {
+                element.nextI = elementJ;
+                element = element.nextJ;
+                elementJ = elementJ.nextJ;
             }
             elementI = elementI.nextI;
         }
@@ -181,9 +202,10 @@ public class MatrixCode {
 
         /**
          * Create element in matrix
+         *
          * @param value value of element
-         * @param i element's line index
-         * @param j element's column index
+         * @param i     element's line index
+         * @param j     element's column index
          */
         public Element(int value, int i, int j) {
             this.value = value;
