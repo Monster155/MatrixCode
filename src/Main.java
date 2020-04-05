@@ -5,22 +5,23 @@ public class Main {
             System.out.println(k + "   " + calculateTime(k));
             k *= 2;
         }
+
     }
 
     private static long calculateTime(int size) {
-        long startTime = System.currentTimeMillis();
+        //create
         int[][] mat = new int[size][size];
-
+        //fill
         for (int i = 0; i < mat.length; i++) {
             for (int j = 0; j < mat[i].length; j++) {
                 mat[i][j] = i * mat.length + j;
             }
         }
-
+        //create matrix code
         MatrixCode matrixCode = new MatrixCode(mat);
+        //calculate time for transp()
+        long startTime = System.currentTimeMillis();
         matrixCode.transp();
-        mat = matrixCode.decode();
-
         return System.currentTimeMillis() - startTime;
     }
 }

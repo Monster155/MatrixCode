@@ -54,16 +54,14 @@ public class MatrixCode {
      * @param value new element's value
      */
     public void insert(int i, int j, int value) {
-        Element element, elementI = head;
-        for (int k = 0; k < SIZE; k++) {
-            element = elementI;
-            for (int l = 0; l < SIZE; l++) {
-                if (k == i && l == j)
-                    element.value = value;
-                element = element.nextJ;
-            }
-            elementI = elementI.nextI;
+        Element element = head;
+        for (int k = 0; k <= i; k++) {
+            element = element.nextI;
         }
+        for (int l = 0; l <= j; l++) {
+            element = element.nextJ;
+        }
+        element.value = value;
     }
 
     /**
@@ -106,9 +104,10 @@ public class MatrixCode {
     public int sumDiag() {
         int sum = 0;
         Element element = head;
-        for (int i = 0; i < SIZE; i++) {
-            sum += element.value;
+        sum += element.value;
+        for (int i = 0; i < SIZE - 1; i++) {
             element = element.nextI.nextJ;
+            sum += element.value;
         }
         return sum;
     }
@@ -140,11 +139,16 @@ public class MatrixCode {
      */
     public void sumCols(int j1, int j2) {
         Element elem1 = head, elem2 = head;
-        for (int i = 0; i < j1; i++) {
-            elem1 = elem1.nextJ;
-        }
-        for (int i = 0; i < j2; i++) {
-            elem2 = elem2.nextJ;
+        if (j1 > j2) {
+            for (int i = 0; i < j1; i++) {
+                if (i < j2) elem2 = elem2.nextJ;
+                elem1 = elem1.nextJ;
+            }
+        } else {
+            for (int i = 0; i < j2; i++) {
+                if (i < j1) elem1 = elem1.nextJ;
+                elem2 = elem2.nextJ;
+            }
         }
         for (int i = 0; i < SIZE; i++) {
             elem1.value += elem2.value;
