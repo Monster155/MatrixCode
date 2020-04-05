@@ -1,14 +1,19 @@
+import java.io.*;
+
 public class Main {
     public static void main(String[] args) {
         int k = 2;
-        for (int i = 0; i < 20; i++) {
-            System.out.println(k + "   " + calculateTime(k));
-            k *= 2;
+        String[] names = new String[]{"decode", "insert", "delete", "minList", "sumDiag", "transp", "sumCols"};
+        for (int i = 1; i < 8; i++) {
+            print(names[i - 1]);
+            for (int j = 0; j < 12; j++) {
+                print(k, calculateTime(k, i));
+                k *= 2;
+            }
         }
-
     }
 
-    private static long calculateTime(int size) {
+    private static long calculateTime(int size, int numOfFunction) {
         //create
         int[][] mat = new int[size][size];
         //fill
@@ -19,9 +24,64 @@ public class Main {
         }
         //create matrix code
         MatrixCode matrixCode = new MatrixCode(mat);
-        //calculate time for transp()
-        long startTime = System.currentTimeMillis();
-        matrixCode.transp();
-        return System.currentTimeMillis() - startTime;
+
+        long startTime;
+        switch (numOfFunction) {
+            case 1:
+                startTime = System.currentTimeMillis();
+                matrixCode.decode();
+                return System.currentTimeMillis() - startTime;
+            case 2:
+                startTime = System.currentTimeMillis();
+                matrixCode.insert(mat.length - 1, mat.length - 1, 1);
+                return System.currentTimeMillis() - startTime;
+            case 3:
+                startTime = System.currentTimeMillis();
+                matrixCode.delete(mat.length - 1, mat.length - 1);
+                return System.currentTimeMillis() - startTime;
+            case 4:
+                startTime = System.currentTimeMillis();
+                matrixCode.minList();
+                return System.currentTimeMillis() - startTime;
+            case 5:
+                startTime = System.currentTimeMillis();
+                matrixCode.sumDiag();
+                return System.currentTimeMillis() - startTime;
+            case 6:
+                //calculate time for transp()
+                startTime = System.currentTimeMillis();
+                matrixCode.transp();
+                return System.currentTimeMillis() - startTime;
+            default:
+                startTime = System.currentTimeMillis();
+                matrixCode.sumCols(1, mat.length - 1);
+                return System.currentTimeMillis() - startTime;
+        }
+    }
+
+    private static void print(int a, long b) {
+        try (FileWriter fw = new FileWriter("text.txt", true);
+             BufferedWriter bw = new BufferedWriter(fw);
+             PrintWriter out = new PrintWriter(bw)) {
+            out.print(a);
+            out.print("    ");
+            out.println(b);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void print(String name) {
+        try (FileWriter fw = new FileWriter("text.txt", true);
+             BufferedWriter bw = new BufferedWriter(fw);
+             PrintWriter out = new PrintWriter(bw)) {
+            out.println(name);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
