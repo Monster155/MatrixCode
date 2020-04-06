@@ -6,8 +6,15 @@ public class Main {
         String[] names = new String[]{"decode", "insert", "delete", "minList", "sumDiag", "transp", "sumCols"};
         for (int i = 1; i < 8; i++) {
             print(names[i - 1]);
+            k = 2;
             for (int j = 0; j < 12; j++) {
-                print(k, calculateTime(k, i));
+                print(k);
+                k *= 2;
+            }
+            print("______________");
+            k = 2;
+            for (int j = 0; j < 12; j++) {
+                print(calculateTime(k, i));
                 k *= 2;
             }
         }
@@ -59,13 +66,23 @@ public class Main {
         }
     }
 
-    private static void print(int a, long b) {
+    private static void print(int a) {
         try (FileWriter fw = new FileWriter("text.txt", true);
              BufferedWriter bw = new BufferedWriter(fw);
              PrintWriter out = new PrintWriter(bw)) {
-            out.print(a);
-            out.print("    ");
-            out.println(b);
+            out.println(a);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void print(long a) {
+        try (FileWriter fw = new FileWriter("text.txt", true);
+             BufferedWriter bw = new BufferedWriter(fw);
+             PrintWriter out = new PrintWriter(bw)) {
+            out.println(a);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
